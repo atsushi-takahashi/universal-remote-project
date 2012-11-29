@@ -15,6 +15,7 @@ import android.view.View.OnTouchListener;
 import android.widget.TextView;
 
 /*赤外線リモコンコード資料
+ * http://jr1wfhbbs.s5.pf-x.net/micom/text/miconlesson28.pdf
 http://elm-chan.org/docs/ir_format.html 
 sharp aquos lc-65gx5
 https://sh-dev.sharp.co.jp/android/modules/d3forum/index.php?topic_id=176
@@ -30,12 +31,15 @@ http://circledays.net/blog/tamura/2011/06/android.html
  * */
 
 public class MainActivity extends Activity implements OnClickListener, OnLongClickListener,OnTouchListener{
-	private Button button1;
-	private Button button2;
-	private Button button3;
-	private Button button4;
-	private Button button5;
-	private Button button6;
+	private Button button1;//カウントアップ
+	private Button button2;//カウントダウン
+	private Button button3;//0で初期化
+	private Button button4;//ストップウォッチ
+	private Button button5;//アプリ終了
+	private Button button6;//ヘルプ表示
+	private Button button7;//音量+
+	private Button button8;//音量-
+	private Button button9;//電源
 	private TextView textView1;
 	private TextView textView2;
 	private TextView textView3;
@@ -46,41 +50,70 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
 	private int count=0;
 	private String bin="";
 	private String countnum="";
+	
+	private SS2012FPGA fpga;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        fpga = new SS2012FPGA_Impl();
         
         textView1 = (TextView)findViewById(R.id.textView1);
     	textView2 = (TextView)findViewById(R.id.textView2);
     	textView3 = (TextView)findViewById(R.id.textView3);
-      
+    	SetText(textView1,"");
+    	SetText(textView2,"");
+    	SetText(textView3,"");
+    	
+    	//1ch カウントアップ
         button1 = (Button)findViewById(R.id.button1);
         button1.setOnClickListener(this);
-        button1.setOnLongClickListener(this);
-        button1.setOnTouchListener(this);
+        //button1.setOnLongClickListener(this);
+        //button1.setOnTouchListener(this);
         
+        //2ch カウントダウン
         button2 = (Button)findViewById(R.id.button2);
         button2.setOnClickListener(this);
-        button2.setOnLongClickListener(this);
-        button2.setOnTouchListener(this);
+        //button2.setOnLongClickListener(this);
+        //button2.setOnTouchListener(this);
         
+        //3ch ０で初期化
         button3 = (Button)findViewById(R.id.button3);
         button3.setOnClickListener(this);
 
+        //4ch ストップウォッチ
         button4 = (Button)findViewById(R.id.button4);
         button4.setOnClickListener(this);
         //button4.setOnLongClickListener(this);
         //button4.setOnTouchListener(this);
         
+        //end アプリ終了
         button5 = (Button)findViewById(R.id.button5);
         button5.setOnClickListener(this);
         
+        //help ヘルプ表示
         button6 = (Button)findViewById(R.id.button6);
         button6.setOnClickListener(this);
          
+        //+ 音量
+        button7 = (Button)findViewById(R.id.button7);
+        button7.setOnClickListener(this);
+        button7.setOnLongClickListener(this);
+        button7.setOnTouchListener(this);
+        
+        //- 音量
+        button8 = (Button)findViewById(R.id.button8);
+        button8.setOnClickListener(this);
+        button8.setOnLongClickListener(this);
+        button8.setOnTouchListener(this);
+        
+        //POW 電源
+        button9 = (Button)findViewById(R.id.button9);
+        button9.setOnClickListener(this);
+        //button9.setOnLongClickListener(this);
+        //button9.setOnTouchListener(this);
          
         } 
     
@@ -111,33 +144,38 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
     	
     	/*button1を押したときにはカウントアップ*/
     	case R.id.button1:
-    		count++;
+    		/*count++;
     		countnum=String.valueOf(count);
     		SetText(textView1,"count:"+countnum);
     		SetText(textView2,"2進数:"+_10tobin(count));
-    		bin="";
+    		bin="";*/
+    		fpga.sendIrDAdata(2);
+    		SetText(textView1,"1chが押されました");
     		break;
     		
     	/*button2を押したときにはカウントダウン*/
     	case R.id.button2:
-    		count--;
+    		/*count--;
     		countnum=String.valueOf(count);
     		SetText(textView1,"count:"+countnum);
     		SetText(textView2,"2進数:"+_10tobin(count));
-    		bin="";
+    		bin="";*/
+    		SetText(textView1,"2chが押されました");
     		break;
     	
     	/*button3を押したときには0で初期化*/
     	case R.id.button3:
-    		count=0;
+    		/*count=0;
     		textView1.setText("count:0");
     		textView2.setText("2進数:0");
-    		textView3.setText("0sec000");
+    		textView3.setText("0sec000");*/
+    		SetText(textView1,"3chが押されました");
     		break;
     		
     	/*button4を押したときにはストップウォッチ起動*/	
     	case R.id.button4:
     		//Log.v("OnTouch", "ボタン４が押されたよ");
+    		/*
     		if(time_flag == false){
 
     			start_time = System.currentTimeMillis();
@@ -171,7 +209,8 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
     		}
     		
     		else
-    			time_flag = false;
+    			time_flag = false;*/
+    		SetText(textView1,"4chが押されました");
     		
     		break;
     		
@@ -185,16 +224,34 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
     		AlertDialog.Builder dlg;
     		dlg = new AlertDialog.Builder(this);
     		dlg.setTitle("Help");
-    		dlg.setMessage( "1ch:カウントアップ\n" +
+    		/*dlg.setMessage( "1ch:カウントアップ\n" +
     						"2ch:カウントダウン\n" +
     						"3ch:カウンタを0に初期化\n" +
     						"4ch:ストップウォッチ起動\n" +
     						"      押す(1回目):起動\n" +
     						"      押す(2回目):停止\n" +
-    						"end:アプリ終了");
+    						"end:アプリ終了");*/
+    		dlg.setMessage("特に何もなし('д'*)");
     		dlg.show();
     		break;
     		
+    	/*button7を押したときには音量+*/	
+    	case R.id.button7:
+    		count++;
+    		SetText(textView1,"音量+が押されました："+count);
+    		
+    		break;
+    		
+    	/*button8を押したときには音量-*/	
+    	case R.id.button8:
+    		count--;
+    		SetText(textView1,"音量-が押されました："+count);
+    		break;
+    		
+    	/*button9を押したときには電源*/	
+    	case R.id.button9:
+    		SetText(textView1,"電源が押されました");
+    		break;
     	}
     }
     
