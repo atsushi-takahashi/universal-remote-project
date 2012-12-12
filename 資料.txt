@@ -1,3 +1,5 @@
+信号解析
+http://www.eleki-jack.com/mycom2/2011/01/pic16_1.html
 
 マイクロ秒
 http://www.ne.jp/asahi/hishidama/home/tech/java/thread.html
