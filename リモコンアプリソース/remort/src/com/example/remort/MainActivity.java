@@ -51,11 +51,35 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
 	private boolean learnf = false;//学習モードフラグ
 	private int count=0;
 	private SS2012FPGA fpga;
-	private IRdata irdata[];
+	private IRdata irdata;
+	
 	
 	/*赤外線リモコンコードデータクラス*/
 	public class IRdata{
-		public long ir_time[];		
+		private long ch1;
+		private long ch2;	
+		private long ch3;	
+		private long ch4;	
+		private long chp;
+		private long chm;
+		/*初期化*/
+		IRdata(){
+			ch1= 0;
+			ch2= 0;
+			ch3= 0;
+			ch4= 0;
+			chp= 0;
+			chm= 0;
+		}
+		public void setData(char ch,long ch){
+			switch(ch){
+			case "1":
+				
+			
+			}
+		}
+		
+		
 	}
 
     @Override
@@ -66,8 +90,9 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
         fpga = new SS2012FPGA_Impl();
         
         /*リモコンデータの初期化*/
-        //for(int i = 1;i<=10;i++)
-        //irdata[i] = new IRdata();
+    	irdata = new IRdata();
+    	
+        //irdata[ = new IRdata();
         
         textView1 = (TextView)findViewById(R.id.textView1);
     	textView2 = (TextView)findViewById(R.id.textView2);
