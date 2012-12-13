@@ -1,6 +1,6 @@
 package com.example.remort;
 /**
- * 
+ *
  */
 
 /**
@@ -8,16 +8,17 @@ package com.example.remort;
  *
  */
 public interface SS2012FPGA {
-	
-	/*‚O,‚P‚Ìƒf[ƒ^ ŒQdata”z—ñ‚ðˆø”‚É‚·‚é
-	 * 
-	 * —á‚¦‚Îdata[]={1,0,0,1,0}
-	 * ‘—MM†@->@P|QQ|P|Q
-	 * */
-	public void sendIrDAdata(int data);
 
-	
-	/*ŽóM‚µ‚½M†‚ªƒnƒC‚ÌŽž‚É‚Í1‚ð•Ô‚µAƒ[‚ÌŽž‚É‚Í0‚ð•Ô‚·*/
+	/*ï¿½O,ï¿½Pï¿½Ìƒfï¿½[ï¿½^ ï¿½Qdataï¿½zï¿½ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½
+	 *
+	 * ï¿½á‚¦ï¿½ï¿½data[]={1,0,0,1,0}
+	 * ï¿½ï¿½ï¿½Mï¿½Mï¿½ï¿½ï¿½@->ï¿½@ï¿½P|ï¿½Qï¿½Q|ï¿½P|ï¿½Q
+	 * */
+	public void sendIrDAdata(long data);
+	public long recieveIrDAdata();
+
+
+	/*ï¿½ï¿½Mï¿½ï¿½ï¿½ï¿½ï¿½Mï¿½ï¿½ï¿½ï¿½ï¿½nï¿½Cï¿½ÌŽï¿½ï¿½É‚ï¿½1ï¿½ï¿½Ô‚ï¿½ï¿½Aï¿½ï¿½ï¿½[ï¿½ÌŽï¿½ï¿½É‚ï¿½0ï¿½ï¿½Ô‚ï¿½*/
 	//public int recieveIrDAdata();
-	
+
 }

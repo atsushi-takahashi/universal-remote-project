@@ -1,324 +1,426 @@
 package com.example.remort;
 
-import android.os.Bundle;
-import android.os.Handler;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
-import android.widget.Button;
 import android.view.MotionEvent;
-import android.view.View.OnClickListener;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
+import android.widget.Button;
 import android.widget.TextView;
 
 
-/*ÔŠOüƒŠƒ‚ƒRƒ“ƒR[ƒh‘—¿
+/*èµ¤å¤–ç·šãƒªãƒ¢ã‚³ãƒ³ã‚³ãƒ¼ãƒ‰è³‡æ–™
  * http://www7a.biglobe.ne.jp/~kanikani/h8sekigai/h8sekigai.html
  * http://jr1wfhbbs.s5.pf-x.net/micom/text/miconlesson28.pdf
-http://elm-chan.org/docs/ir_format.html 
+http://elm-chan.org/docs/ir_format.html
 sharp aquos lc-65gx5
 https://sh-dev.sharp.co.jp/android/modules/d3forum/index.php?topic_id=176
 https://sh-dev.sharp.co.jp/android/reference/r329d/jp/co/sharp/android/io/irrc/package-frame.html
 http://dpmi486.blog83.fc2.com/?tag=iPhone
-http://circledays.net/blog/tamura/2011/06/android.html
+http://circledays.net/blog/tamura/2011/06/android.html*/
 
- 
-*/
-/*
- * public interface SS2012FPGA{
- * public void sedIrDAdata(int i);}
- * */
+
+
 
 public class MainActivity extends Activity implements OnClickListener, OnLongClickListener,OnTouchListener{
-	private Button button1; //ƒJƒEƒ“ƒgƒAƒbƒv
-	private Button button2; //ƒJƒEƒ“ƒgƒ_ƒEƒ“
-	private Button button3; //0‚Å‰Šú‰»
-	private Button button4; //ƒXƒgƒbƒvƒEƒHƒbƒ`
-	private Button button5; //ƒAƒvƒŠI—¹
-	private Button button6; //ƒwƒ‹ƒv•\¦
-	private Button button7; //‰¹—Ê+
-	private Button button8; //‰¹—Ê-
-	private Button button9; //“dŒ¹
-	private Button button10;//learn
-	private TextView textView1;
-	private TextView textView2;
-	private TextView textView3;
-	private boolean longclick = true;//’·‰Ÿ‚µƒtƒ‰ƒO
-	private boolean learnf = false;//ŠwKƒ‚[ƒhƒtƒ‰ƒO
-	private int count=0;
-	private SS2012FPGA fpga;
-	private IRdata irdata;
-	
-	
-	/*ÔŠOüƒŠƒ‚ƒRƒ“ƒR[ƒhƒf[ƒ^ƒNƒ‰ƒX*/
+
+
+
+	private Button button1; 	//1ch
+	private Button button2; 	//2ch
+	private Button button3; 	//3ch
+	private Button button4; 	//4ch
+	private Button button5; 	//ã‚¢ãƒ—ãƒªçµ‚äº†
+	private Button button6; 	//ãƒ˜ãƒ«ãƒ—è¡¨ç¤º
+	private Button button7; 	//éŸ³é‡+
+	private Button button8; 	//éŸ³é‡-
+	private Button button9; 	//é›»æº
+	private Button button10;	//learn
+
+
+	private TextView textView1;			//ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼
+	private boolean longclick = true;	//é•·æŠ¼ã—ãƒ•ãƒ©ã‚°
+	private boolean learnf = false;		//å­¦ç¿’ãƒ¢ãƒ¼ãƒ‰ãƒ•ãƒ©ã‚°
+	private SS2012FPGA fpga;			//fpgaã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹
+	private IRdata irdata;				//èµ¤å¤–ç·šãƒªãƒ¢ã‚³ãƒ³ã‚³ãƒ¼ãƒ‰ã‚³ãƒ³ãƒ†ãƒŠ
+	private int count;					//ã‚«ã‚¦ãƒ³ãƒˆå¤‰æ•°
+
+
+
+
+/**************************èµ¤å¤–ç·šãƒªãƒ¢ã‚³ãƒ³ã‚³ãƒ¼ãƒ‰ãƒ‡ãƒ¼ã‚¿ã‚¯ãƒ©ã‚¹**************************/
+
+
 	public class IRdata{
 		private long ch1;
-		private long ch2;	
-		private long ch3;	
-		private long ch4;	
+		private long ch2;
+		private long ch3;
+		private long ch4;
 		private long chp;
 		private long chm;
-		/*‰Šú‰»*/
+		private long chP;
+
+		/*åˆæœŸåŒ–*/
 		IRdata(){
-			ch1= 0;
-			ch2= 0;
-			ch3= 0;
-			ch4= 0;
-			chp= 0;
-			chm= 0;
+			ch1 = 0;
+			ch2 = 0;
+			ch3 = 0;
+			ch4 = 0;
+			chp = 0;
+			chm = 0;
+			chP = 0;
 		}
-		public void setData(char ch,long ch){
-			switch(ch){
-			case "1":
-				
-			
+
+		/*ãƒªãƒ¢ã‚³ãƒ³ã‚³ãƒ¼ãƒ‰ã®ã‚²ãƒƒã‚¿*/
+		public long getData(char chname){
+			switch(chname){
+			case '1':
+				return ch1;
+
+			case '2':
+				return ch2;
+
+			case '3':
+				return ch3;
+
+			case '4':
+				return ch4;
+
+			case 'p':
+				return chp;
+
+			case 'm':
+				return chm;
+			case 'P':
+				return chP;
+
+			default:
+				return 0;
 			}
 		}
-		
-		
+
+		/*ãƒªãƒ¢ã‚³ãƒ³ã‚³ãƒ¼ãƒ‰ã®ã‚»ãƒƒã‚¿*/
+		public void setData(char chname,long data){
+			switch(chname){
+			case '1':
+				ch1 = data;
+				break;
+			case '2':
+				ch2 = data;
+				break;
+			case '3':
+				ch3 = data;
+				break;
+			case '4':
+				ch4 = data;
+				break;
+			case 'p':
+				chp = data;
+				break;
+			case 'm':
+				chm = data;
+				break;
+			case 'P':
+				chP = data;
+				break;
+			default:
+				break;
+			}
+		}
+
+
 	}
+
+
+
+/**************************onCreate**************************/
+
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-    	
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         fpga = new SS2012FPGA_Impl();
-        
-        /*ƒŠƒ‚ƒRƒ“ƒf[ƒ^‚Ì‰Šú‰»*/
+
+        //ãƒªãƒ¢ã‚³ãƒ³ãƒ‡ãƒ¼ã‚¿ã®åˆæœŸåŒ–
     	irdata = new IRdata();
-    	
-        //irdata[ = new IRdata();
-        
+    	irdata.setData('1',111111111111L);
+    	irdata.setData('2',222222222222L);
+    	irdata.setData('3',333333333333L);
+    	irdata.setData('4',444444444444L);
+    	irdata.setData('p',555555555555L);
+    	irdata.setData('m',666666666666L);
+    	irdata.setData('P',777777777777L);
+
+
         textView1 = (TextView)findViewById(R.id.textView1);
-    	textView2 = (TextView)findViewById(R.id.textView2);
-    	textView3 = (TextView)findViewById(R.id.textView3);
-    	SetText(textView1,"");
-    	SetText(textView2,"");
-    	SetText(textView3,"");
-    	
-    	//1ch ƒJƒEƒ“ƒgƒAƒbƒv
+    	textView1.setText("*èµ¤å¤–ç·šãƒªãƒ¢ã‚³ãƒ³ã‚¢ãƒ—ãƒª*");
+
+
+    	//1ch ã‚«ã‚¦ãƒ³ãƒˆã‚¢ãƒƒãƒ—
         button1 = (Button)findViewById(R.id.button1);
         button1.setOnClickListener(this);
-        
-        //2ch ƒJƒEƒ“ƒgƒ_ƒEƒ“
+
+        //2ch ã‚«ã‚¦ãƒ³ãƒˆãƒ€ã‚¦ãƒ³
         button2 = (Button)findViewById(R.id.button2);
         button2.setOnClickListener(this);
-        
-        //3ch ‚O‚Å‰Šú‰»
+
+        //3ch ï¼ã§åˆæœŸåŒ–
         button3 = (Button)findViewById(R.id.button3);
         button3.setOnClickListener(this);
 
-        //4ch ƒXƒgƒbƒvƒEƒHƒbƒ`
+        //4ch ã‚¹ãƒˆãƒƒãƒ—ã‚¦ã‚©ãƒƒãƒ
         button4 = (Button)findViewById(R.id.button4);
         button4.setOnClickListener(this);
-        
-        //end ƒAƒvƒŠI—¹
+
+        //end ã‚¢ãƒ—ãƒªçµ‚äº†
         button5 = (Button)findViewById(R.id.button5);
         button5.setOnClickListener(this);
-        
-        //help ƒwƒ‹ƒv•\¦
+
+        //help ãƒ˜ãƒ«ãƒ—è¡¨ç¤º
         button6 = (Button)findViewById(R.id.button6);
         button6.setOnClickListener(this);
-         
-        //+ ‰¹—Ê
+
+        //+ éŸ³é‡
         button7 = (Button)findViewById(R.id.button7);
         button7.setOnClickListener(this);
         button7.setOnLongClickListener(this);
         button7.setOnTouchListener(this);
-        
-        //- ‰¹—Ê
+
+        //- éŸ³é‡
         button8 = (Button)findViewById(R.id.button8);
         button8.setOnClickListener(this);
         button8.setOnLongClickListener(this);
         button8.setOnTouchListener(this);
-        
-        //POW “dŒ¹
+
+        //POW é›»æº
         button9 = (Button)findViewById(R.id.button9);
         button9.setOnClickListener(this);
-        
-        //Learn ŠwKƒ‚[ƒh
+
+        //Learn å­¦ç¿’ãƒ¢ãƒ¼ãƒ‰
         button10 = (Button)findViewById(R.id.button10);
         button10.setOnClickListener(this);
-        } 
-    
- 
-    
-    
+
+
+        }
+
+
+
+
+
+
+
+/**************************ã‚¿ãƒƒãƒå‡¦ç†**************************/
+
+
+
+
+
+
     public boolean onTouch(View v,MotionEvent event) {
 
-        //ƒ{ƒ^ƒ“—£‚³‚ê‚½‚ç’·‰Ÿ‚µƒtƒ‰ƒO‚ğ‰º‚°‚é
+        //ãƒœã‚¿ãƒ³é›¢ã•ã‚ŒãŸã‚‰é•·æŠ¼ã—ãƒ•ãƒ©ã‚°ã‚’ä¸‹ã’ã‚‹
         if (event.getAction() == MotionEvent.ACTION_UP) {
         	longclick = false;
-        	Log.v("OnTouch", "—£‚µ‚½‚æ");
+        	Log.v("OnTouch", "é›¢ã—ãŸã‚ˆ");
         }
-        
-        //ƒ{ƒ^ƒ“‰Ÿ‚³‚ê‚½‚ç’·‰Ÿ‚µƒtƒ‰ƒO‚ğ—§‚Ä‚é
+
+        //ãƒœã‚¿ãƒ³æŠ¼ã•ã‚ŒãŸã‚‰é•·æŠ¼ã—ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
         else if(event.getAction() == MotionEvent.ACTION_DOWN){
         	longclick = true;
-        	Log.v("OnTouch", "‰Ÿ‚µ‚½‚æ");}
+        	Log.v("OnTouch", "æŠ¼ã—ãŸã‚ˆ");}
 
         return false;
       }
-    
-    /*ƒ{ƒ^ƒ“‚ğƒNƒŠƒbƒN‚µ‚½‚Æ‚«‚Ì“®ì*/
+
+    /*ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ãŸã¨ãã®å‹•ä½œ*/
     public void onClick(View v){
-    	
+
     	switch(v.getId()){
-    	
-    	/*button1‚ğ‰Ÿ‚µ‚½‚Æ‚«‚É‚ÍƒJƒEƒ“ƒgƒAƒbƒv*/
+
+
+    	/*button1ã‚’æŠ¼ã—ãŸã¨ãã«ã¯1ch*/
     	case R.id.button1:
     		if(learnf == true)
-    			Learn(v,1);
+    			Learn(v,'1');
     		else{
-    		fpga.sendIrDAdata(2);
-    		SetText(textView1,"1ch‚ª‰Ÿ‚³‚ê‚Ü‚µ‚½");
+    		fpga.sendIrDAdata(irdata.getData('1'));
+    		textView1.setText("1chãŒæŠ¼ã•ã‚Œã¾ã—ãŸ");
     		}
     		break;
-    		
-    		
-    	/*button2‚ğ‰Ÿ‚µ‚½‚Æ‚«‚É‚ÍƒJƒEƒ“ƒgƒ_ƒEƒ“*/
+
+
+    	/*button2ã‚’æŠ¼ã—ãŸã¨ãã«ã¯2ch*/
     	case R.id.button2:
     		if(learnf == true)
-    			Learn(v,2);
+    			Learn(v,'2');
     		else{
-    		SetText(textView1,"2ch‚ª‰Ÿ‚³‚ê‚Ü‚µ‚½");
+    			fpga.sendIrDAdata(irdata.getData('2'));
+    			textView1.setText("2chãŒæŠ¼ã•ã‚Œã¾ã—ãŸ");
     		}
     		break;
-    	
-    	/*button3‚ğ‰Ÿ‚µ‚½‚Æ‚«‚É‚Í0‚Å‰Šú‰»*/
+
+    	/*button3ã‚’æŠ¼ã—ãŸã¨ãã«ã¯3ch*/
     	case R.id.button3:
     		if(learnf == true)
-    			Learn(v,3);
+    			Learn(v,'3');
     		else{
-    		SetText(textView1,"3ch‚ª‰Ÿ‚³‚ê‚Ü‚µ‚½");
+    			fpga.sendIrDAdata(irdata.getData('3'));
+    			textView1.setText("3chãŒæŠ¼ã•ã‚Œã¾ã—ãŸ");
     		}
     		break;
-    		
-    	/*button4‚ğ‰Ÿ‚µ‚½‚Æ‚«‚É‚ÍƒXƒgƒbƒvƒEƒHƒbƒ`‹N“®*/	
+
+    	/*button4ã‚’æŠ¼ã—ãŸã¨ãã«ã¯4ch*/
     	case R.id.button4:
     		if(learnf == true)
-    			Learn(v,4);
+    			Learn(v,'4');
     		else{
-    		SetText(textView1,"4ch‚ª‰Ÿ‚³‚ê‚Ü‚µ‚½");
+    			fpga.sendIrDAdata(irdata.getData('4'));
+    		textView1.setText("4chãŒæŠ¼ã•ã‚Œã¾ã—ãŸ");
     		}
     		break;
-    		
-    	/*button5‚ğ‰Ÿ‚µ‚½‚Æ‚«‚É‚ÍƒAƒvƒŠI—¹*/	
+
+    	/*button5ã‚’æŠ¼ã—ãŸã¨ãã«ã¯ã‚¢ãƒ—ãƒªçµ‚äº†*/
     	case R.id.button5:
     		finish();
     		break;
-    		
-    	/*button6‚ğ‰Ÿ‚µ‚½‚Æ‚«‚É‚Íƒwƒ‹ƒv•\¦*/	
+
+    	/*button6ã‚’æŠ¼ã—ãŸã¨ãã«ã¯ãƒ˜ãƒ«ãƒ—è¡¨ç¤º*/
     	case R.id.button6:
     		AlertDialog.Builder dlg;
     		dlg = new AlertDialog.Builder(this);
     		dlg.setTitle("Help");
-    		/*dlg.setMessage( "1ch:ƒJƒEƒ“ƒgƒAƒbƒv\n" +
-    						"2ch:ƒJƒEƒ“ƒgƒ_ƒEƒ“\n" +
-    						"3ch:ƒJƒEƒ“ƒ^‚ğ0‚É‰Šú‰»\n" +
-    						"4ch:ƒXƒgƒbƒvƒEƒHƒbƒ`‹N“®\n" +
-    						"      ‰Ÿ‚·(1‰ñ–Ú):‹N“®\n" +
-    						"      ‰Ÿ‚·(2‰ñ–Ú):’â~\n" +
-    						"end:ƒAƒvƒŠI—¹");*/
-    		dlg.setMessage("“Á‚É‰½‚à‚È‚µ('„t'*)");
+    		dlg.setMessage("ç‰¹ã«ä½•ã‚‚ãªã—('Ğ´'*)");
     		dlg.show();
     		break;
-    		
-    	/*button7‚ğ‰Ÿ‚µ‚½‚Æ‚«‚É‚Í‰¹—Ê+*/	
+
+    	/*button7ã‚’æŠ¼ã—ãŸã¨ãã«ã¯éŸ³é‡+*/
     	case R.id.button7:
     		if(learnf == true)
-    			Learn(v,7);
+    			Learn(v,'p');
     		else{
     		count++;
-    		SetText(textView1,"‰¹—Ê+‚ª‰Ÿ‚³‚ê‚Ü‚µ‚½F"+count);
+    		fpga.sendIrDAdata(irdata.getData('p'));
+    		textView1.setText("éŸ³é‡+ãŒæŠ¼ã•ã‚Œã¾ã—ãŸ");
     		}
     		break;
-    		
-    	/*button8‚ğ‰Ÿ‚µ‚½‚Æ‚«‚É‚Í‰¹—Ê-*/	
+
+    	/*button8ã‚’æŠ¼ã—ãŸã¨ãã«ã¯éŸ³é‡-*/
     	case R.id.button8:
     		if(learnf == true)
-    			Learn(v,8);
+    			Learn(v,'m');
     		else{
     		count--;
-    		SetText(textView1,"‰¹—Ê-‚ª‰Ÿ‚³‚ê‚Ü‚µ‚½F"+count);
+    		fpga.sendIrDAdata(irdata.getData('m'));
+    		textView1.setText("éŸ³é‡-ãŒæŠ¼ã•ã‚Œã¾ã—ãŸ");
     		}
     		break;
-    		
-    	/*button9‚ğ‰Ÿ‚µ‚½‚Æ‚«‚É‚Í“dŒ¹*/	
+
+    	/*button9ã‚’æŠ¼ã—ãŸã¨ãã«ã¯é›»æº*/
     	case R.id.button9:
     		if(learnf == true)
-    			Learn(v,9);
+    			Learn(v,'P');
     		else{
-    		SetText(textView1,"“dŒ¹‚ª‰Ÿ‚³‚ê‚Ü‚µ‚½");
+    			fpga.sendIrDAdata(irdata.getData('P'));
+    			textView1.setText("é›»æºãŒæŠ¼ã•ã‚Œã¾ã—ãŸ");
     		}
     		break;
-    		
-    	/*button10‚ğ‰Ÿ‚µ‚½‚Æ‚«‚É‚ÍŠwKƒ‚[ƒh*/
+
+    	/*button10ã‚’æŠ¼ã—ãŸã¨ãã«ã¯å­¦ç¿’ãƒ¢ãƒ¼ãƒ‰*/
     	case R.id.button10:
     		if(learnf==false){
     		learnf = true;
     		textView1.setTextColor(Color.RED);
     	    textView1.setBackgroundColor(Color.BLACK);
-    		SetText(textView1,"ŠwKƒ‚[ƒh");
+    	    textView1.setText("å­¦ç¿’ãƒ¢ãƒ¼ãƒ‰");
+
     		}
     		else{
     		learnf = false;
     		textView1.setTextColor(Color.BLACK);
     	    textView1.setBackgroundColor(Color.WHITE);
-    		SetText(textView1,"");
+    	    textView1.setText("");
+
     		}
-    			
+
     		break;
     	}
     }
-    
-    //’·‰Ÿ‚µ‚³‚ê‚½‚Ìˆ—
+
+
+
+
+
+
+/**************************é•·æŠ¼ã—å‡¦ç†**************************/
+
+
+
+
+
     public boolean onLongClick(final View v) {
 
-    	
+
     	new Thread (new Runnable() {
 
     		Handler handler = new Handler();
     		public void run(){
-    			
+
     			handler.post(new Runnable(){
     				public void run(){
     						Log.v("OnTouch", "new thread");
     						v.performClick();} });
-    			
+
     			if(longclick == true)
     				handler.postDelayed(this,150);
     			else
     				return;
     			}
-    		
+
     	}).start();
-    	
+
 		return true;
 	}
-  
-    
-    //ŠwKƒ‚[ƒh
-    public void Learn(View v ,int ch){
-    	SetText(textView1,""+ch+"‚ÌŠwK");
+
+
+
+
+
+
+
+
+/**************************å­¦ç¿’ãƒ¢ãƒ¼ãƒ‰é–¢æ•°**************************/
+
+
+
+
+
+
+    public void Learn(View v ,char ch){
+    	irdata.setData(ch,fpga.recieveIrDAdata());
+    	textView1.setText(""+ch+"ã®å­¦ç¿’");
     }
-    
-    
-    public void SetText(TextView t,String s){
-    	t.setText(s);
-    }
-    
+
+
+
+/**************************ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãƒ¡ãƒ‹ãƒ¥ãƒ¼**************************/
+
+
+
     @Override
      public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
-    
+
 }
-
-
