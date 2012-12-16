@@ -243,6 +243,8 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
         return false;
       }
 
+/**************************クリック処理**************************/
+    
     /*ボタンをクリックしたときの動作*/
     public void onClick(View v){
 
