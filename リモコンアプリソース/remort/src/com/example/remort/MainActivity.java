@@ -16,7 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
-/*èµ¤å¤–ç·šãƒªãƒ¢ã‚³ãƒ³ã‚³ãƒ¼ãƒ‰è³‡æ–™
+/*ÔŠOüƒŠƒ‚ƒRƒ“ƒR[ƒh‘—¿
  * http://www7a.biglobe.ne.jp/~kanikani/h8sekigai/h8sekigai.html
  * http://jr1wfhbbs.s5.pf-x.net/micom/text/miconlesson28.pdf
 http://elm-chan.org/docs/ir_format.html
@@ -37,105 +37,42 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
 	private Button button2; 	//2ch
 	private Button button3; 	//3ch
 	private Button button4; 	//4ch
-	private Button button5; 	//ã‚¢ãƒ—ãƒªçµ‚äº†
-	private Button button6; 	//ãƒ˜ãƒ«ãƒ—è¡¨ç¤º
-	private Button button7; 	//éŸ³é‡+
-	private Button button8; 	//éŸ³é‡-
-	private Button button9; 	//é›»æº
+	private Button button5; 	//ƒAƒvƒŠI—¹
+	private Button button6; 	//ƒwƒ‹ƒv•\¦
+	private Button button7; 	//‰¹—Ê+
+	private Button button8; 	//‰¹—Ê-
+	private Button button9; 	//“dŒ¹
 	private Button button10;	//learn
 
-
-	private TextView textView1;			//ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼
-	private boolean longclick = true;	//é•·æŠ¼ã—ãƒ•ãƒ©ã‚°
-	private boolean learnf = false;		//å­¦ç¿’ãƒ¢ãƒ¼ãƒ‰ãƒ•ãƒ©ã‚°
-	private SS2012FPGA fpga;			//fpgaã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹
-	private IRdata irdata;				//èµ¤å¤–ç·šãƒªãƒ¢ã‚³ãƒ³ã‚³ãƒ¼ãƒ‰ã‚³ãƒ³ãƒ†ãƒŠ
-	private int count;					//ã‚«ã‚¦ãƒ³ãƒˆå¤‰æ•°
-
-
-
-
-/**************************èµ¤å¤–ç·šãƒªãƒ¢ã‚³ãƒ³ã‚³ãƒ¼ãƒ‰ãƒ‡ãƒ¼ã‚¿ã‚¯ãƒ©ã‚¹**************************/
-
-
-	public class IRdata{
-		private long ch1;
-		private long ch2;
-		private long ch3;
-		private long ch4;
-		private long chp;
-		private long chm;
-		private long chP;
-
-		/*åˆæœŸåŒ–*/
-		IRdata(){
-			ch1 = 0;
-			ch2 = 0;
-			ch3 = 0;
-			ch4 = 0;
-			chp = 0;
-			chm = 0;
-			chP = 0;
-		}
-
-		/*ãƒªãƒ¢ã‚³ãƒ³ã‚³ãƒ¼ãƒ‰ã®ã‚²ãƒƒã‚¿*/
-		public long getData(char chname){
-			switch(chname){
-			case '1':
-				return ch1;
-
-			case '2':
-				return ch2;
-
-			case '3':
-				return ch3;
-
-			case '4':
-				return ch4;
-
-			case 'p':
-				return chp;
-
-			case 'm':
-				return chm;
-			case 'P':
-				return chP;
-
-			default:
-				return 0;
-			}
-		}
-
-		/*ãƒªãƒ¢ã‚³ãƒ³ã‚³ãƒ¼ãƒ‰ã®ã‚»ãƒƒã‚¿*/
-		public void setData(char chname,long data){
-			switch(chname){
-			case '1':
-				ch1 = data;
-				break;
-			case '2':
-				ch2 = data;
-				break;
-			case '3':
-				ch3 = data;
-				break;
-			case '4':
-				ch4 = data;
-				break;
-			case 'p':
-				chp = data;
-				break;
-			case 'm':
-				chm = data;
-				break;
-			case 'P':
-				chP = data;
-				break;
-			default:
-				break;
-			}
-		}
+	private int count;					//ƒJƒEƒ“ƒg•Ï”
+	private TextView textView1;			//ƒeƒLƒXƒgƒrƒ…[
+	private boolean longclick = true;	//’·‰Ÿ‚µƒtƒ‰ƒO
+	private boolean learnf = false;		//ŠwKƒ‚[ƒhƒtƒ‰ƒO
+	private SS2012FPGA fpga;			//fpgaƒCƒ“ƒ^[ƒtƒFƒCƒX
+	private irData ch_1;				//ÔŠOüƒŠƒ‚ƒRƒ“ƒR[ƒh
+	private irData ch_2;
+	private irData ch_3;
+	private irData ch_4;
+	private irData ch_plu;
+	private irData ch_min;
+	private irData ch_pow;
 
 
+
+
+/**************************ÔŠOüƒŠƒ‚ƒRƒ“ƒR[ƒhƒf[ƒ^ƒNƒ‰ƒX**************************/
+
+	public class irData{
+		private long ch_code;
+
+		/*‰Šú‰»*/
+		irData(){ ch_code = 0; }
+
+		/*ƒŠƒ‚ƒRƒ“ƒR[ƒh‚ÌƒQƒbƒ^*/
+		public long get_data(){ return ch_code; }
+
+		/*ƒŠƒ‚ƒRƒ“ƒR[ƒh‚ÌƒZƒbƒ^*/
+		public void set_data(long data){ ch_code = data; }
 	}
 
 
@@ -152,62 +89,68 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
         setContentView(R.layout.activity_main);
         fpga = new SS2012FPGA_Impl();
 
-        //ãƒªãƒ¢ã‚³ãƒ³ãƒ‡ãƒ¼ã‚¿ã®åˆæœŸåŒ–
-    	irdata = new IRdata();
-    	irdata.setData('1',111111111111L);
-    	irdata.setData('2',222222222222L);
-    	irdata.setData('3',333333333333L);
-    	irdata.setData('4',444444444444L);
-    	irdata.setData('p',555555555555L);
-    	irdata.setData('m',666666666666L);
-    	irdata.setData('P',777777777777L);
+        //ƒŠƒ‚ƒRƒ“ƒf[ƒ^‚Ì‰Šú‰»
+    	ch_1 = new irData();
+    	ch_2 = new irData();
+    	ch_3 = new irData();
+    	ch_4 = new irData();
+    	ch_plu = new irData();
+    	ch_min = new irData();
+    	ch_pow = new irData();
+    	ch_1.set_data(111111111111L);
+    	ch_2.set_data(222222222222L);
+    	ch_3.set_data(333333333333L);
+    	ch_4.set_data(444444444444L);
+    	ch_plu.set_data(555555555555L);
+    	ch_min.set_data(666666666666L);
+    	ch_pow.set_data(777777777777L);
 
 
         textView1 = (TextView)findViewById(R.id.textView1);
-    	textView1.setText("*èµ¤å¤–ç·šãƒªãƒ¢ã‚³ãƒ³ã‚¢ãƒ—ãƒª*");
+    	textView1.setText("*ÔŠOüƒŠƒ‚ƒRƒ“ƒAƒvƒŠ*");
 
 
-    	//1ch ã‚«ã‚¦ãƒ³ãƒˆã‚¢ãƒƒãƒ—
+    	//1ch ƒJƒEƒ“ƒgƒAƒbƒv
         button1 = (Button)findViewById(R.id.button1);
         button1.setOnClickListener(this);
 
-        //2ch ã‚«ã‚¦ãƒ³ãƒˆãƒ€ã‚¦ãƒ³
+        //2ch ƒJƒEƒ“ƒgƒ_ƒEƒ“
         button2 = (Button)findViewById(R.id.button2);
         button2.setOnClickListener(this);
 
-        //3ch ï¼ã§åˆæœŸåŒ–
+        //3ch ‚O‚Å‰Šú‰»
         button3 = (Button)findViewById(R.id.button3);
         button3.setOnClickListener(this);
 
-        //4ch ã‚¹ãƒˆãƒƒãƒ—ã‚¦ã‚©ãƒƒãƒ
+        //4ch ƒXƒgƒbƒvƒEƒHƒbƒ`
         button4 = (Button)findViewById(R.id.button4);
         button4.setOnClickListener(this);
 
-        //end ã‚¢ãƒ—ãƒªçµ‚äº†
+        //end ƒAƒvƒŠI—¹
         button5 = (Button)findViewById(R.id.button5);
         button5.setOnClickListener(this);
 
-        //help ãƒ˜ãƒ«ãƒ—è¡¨ç¤º
+        //help ƒwƒ‹ƒv•\¦
         button6 = (Button)findViewById(R.id.button6);
         button6.setOnClickListener(this);
 
-        //+ éŸ³é‡
+        //+ ‰¹—Ê
         button7 = (Button)findViewById(R.id.button7);
         button7.setOnClickListener(this);
         button7.setOnLongClickListener(this);
         button7.setOnTouchListener(this);
 
-        //- éŸ³é‡
+        //- ‰¹—Ê
         button8 = (Button)findViewById(R.id.button8);
         button8.setOnClickListener(this);
         button8.setOnLongClickListener(this);
         button8.setOnTouchListener(this);
 
-        //POW é›»æº
+        //POW “dŒ¹
         button9 = (Button)findViewById(R.id.button9);
         button9.setOnClickListener(this);
 
-        //Learn å­¦ç¿’ãƒ¢ãƒ¼ãƒ‰
+        //Learn ŠwKƒ‚[ƒh
         button10 = (Button)findViewById(R.id.button10);
         button10.setOnClickListener(this);
 
@@ -220,7 +163,7 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
 
 
 
-/**************************ã‚¿ãƒƒãƒå‡¦ç†**************************/
+/**************************ƒ^ƒbƒ`ˆ—**************************/
 
 
 
@@ -229,122 +172,122 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
 
     public boolean onTouch(View v,MotionEvent event) {
 
-        //ãƒœã‚¿ãƒ³é›¢ã•ã‚ŒãŸã‚‰é•·æŠ¼ã—ãƒ•ãƒ©ã‚°ã‚’ä¸‹ã’ã‚‹
+        //ƒ{ƒ^ƒ“—£‚³‚ê‚½‚ç’·‰Ÿ‚µƒtƒ‰ƒO‚ğ‰º‚°‚é
         if (event.getAction() == MotionEvent.ACTION_UP) {
         	longclick = false;
-        	Log.v("OnTouch", "é›¢ã—ãŸã‚ˆ");
+        	Log.v("OnTouch", "—£‚µ‚½‚æ");
         }
 
-        //ãƒœã‚¿ãƒ³æŠ¼ã•ã‚ŒãŸã‚‰é•·æŠ¼ã—ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
+        //ƒ{ƒ^ƒ“‰Ÿ‚³‚ê‚½‚ç’·‰Ÿ‚µƒtƒ‰ƒO‚ğ—§‚Ä‚é
         else if(event.getAction() == MotionEvent.ACTION_DOWN){
         	longclick = true;
-        	Log.v("OnTouch", "æŠ¼ã—ãŸã‚ˆ");}
+        	Log.v("OnTouch", "‰Ÿ‚µ‚½‚æ");}
 
         return false;
       }
 
-/**************************ã‚¯ãƒªãƒƒã‚¯å‡¦ç†**************************/
+/**************************ƒNƒŠƒbƒNˆ—**************************/
     
-    /*ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ãŸã¨ãã®å‹•ä½œ*/
+    /*ƒ{ƒ^ƒ“‚ğƒNƒŠƒbƒN‚µ‚½‚Æ‚«‚Ì“®ì*/
     public void onClick(View v){
 
     	switch(v.getId()){
 
 
-    	/*button1ã‚’æŠ¼ã—ãŸã¨ãã«ã¯1ch*/
+    	/*button1‚ğ‰Ÿ‚µ‚½‚Æ‚«‚É‚Í1ch*/
     	case R.id.button1:
     		if(learnf == true)
     			Learn(v,'1');
     		else{
-    		fpga.sendIrDAdata(irdata.getData('1'));
-    		textView1.setText("1chãŒæŠ¼ã•ã‚Œã¾ã—ãŸ");
+    		fpga.sendIrDAdata(ch_1.get_data());
+    		textView1.setText(""+ch_1.get_data()+"");
     		}
     		break;
 
 
-    	/*button2ã‚’æŠ¼ã—ãŸã¨ãã«ã¯2ch*/
+    	/*button2‚ğ‰Ÿ‚µ‚½‚Æ‚«‚É‚Í2ch*/
     	case R.id.button2:
     		if(learnf == true)
     			Learn(v,'2');
     		else{
-    			fpga.sendIrDAdata(irdata.getData('2'));
-    			textView1.setText("2chãŒæŠ¼ã•ã‚Œã¾ã—ãŸ");
+    			fpga.sendIrDAdata(ch_2.get_data());
+    			textView1.setText(""+ch_2.get_data()+"");
     		}
     		break;
 
-    	/*button3ã‚’æŠ¼ã—ãŸã¨ãã«ã¯3ch*/
+    	/*button3‚ğ‰Ÿ‚µ‚½‚Æ‚«‚É‚Í3ch*/
     	case R.id.button3:
     		if(learnf == true)
     			Learn(v,'3');
     		else{
-    			fpga.sendIrDAdata(irdata.getData('3'));
-    			textView1.setText("3chãŒæŠ¼ã•ã‚Œã¾ã—ãŸ");
+    			fpga.sendIrDAdata(ch_3.get_data());
+    			textView1.setText(""+ch_3.get_data()+"");
     		}
     		break;
 
-    	/*button4ã‚’æŠ¼ã—ãŸã¨ãã«ã¯4ch*/
+    	/*button4‚ğ‰Ÿ‚µ‚½‚Æ‚«‚É‚Í4ch*/
     	case R.id.button4:
     		if(learnf == true)
     			Learn(v,'4');
     		else{
-    			fpga.sendIrDAdata(irdata.getData('4'));
-    		textView1.setText("4chãŒæŠ¼ã•ã‚Œã¾ã—ãŸ");
+    			fpga.sendIrDAdata(ch_4.get_data());
+    			textView1.setText(""+ch_4.get_data()+"");
     		}
     		break;
 
-    	/*button5ã‚’æŠ¼ã—ãŸã¨ãã«ã¯ã‚¢ãƒ—ãƒªçµ‚äº†*/
+    	/*button5‚ğ‰Ÿ‚µ‚½‚Æ‚«‚É‚ÍƒAƒvƒŠI—¹*/
     	case R.id.button5:
     		finish();
     		break;
 
-    	/*button6ã‚’æŠ¼ã—ãŸã¨ãã«ã¯ãƒ˜ãƒ«ãƒ—è¡¨ç¤º*/
+    	/*button6‚ğ‰Ÿ‚µ‚½‚Æ‚«‚É‚Íƒwƒ‹ƒv•\¦*/
     	case R.id.button6:
     		AlertDialog.Builder dlg;
     		dlg = new AlertDialog.Builder(this);
     		dlg.setTitle("Help");
-    		dlg.setMessage("ç‰¹ã«ä½•ã‚‚ãªã—('Ğ´'*)");
+    		dlg.setMessage("“Á‚É‰½‚à‚È‚µ('„t'*)");
     		dlg.show();
     		break;
 
-    	/*button7ã‚’æŠ¼ã—ãŸã¨ãã«ã¯éŸ³é‡+*/
+    	/*button7‚ğ‰Ÿ‚µ‚½‚Æ‚«‚É‚Í‰¹—Ê+*/
     	case R.id.button7:
     		if(learnf == true)
     			Learn(v,'p');
     		else{
     		count++;
-    		fpga.sendIrDAdata(irdata.getData('p'));
-    		textView1.setText("éŸ³é‡+ãŒæŠ¼ã•ã‚Œã¾ã—ãŸ");
+    		fpga.sendIrDAdata(ch_plu.get_data());
+    		textView1.setText(""+ch_plu.get_data()+":"+count+"");
     		}
     		break;
 
-    	/*button8ã‚’æŠ¼ã—ãŸã¨ãã«ã¯éŸ³é‡-*/
+    	/*button8‚ğ‰Ÿ‚µ‚½‚Æ‚«‚É‚Í‰¹—Ê-*/
     	case R.id.button8:
     		if(learnf == true)
     			Learn(v,'m');
     		else{
     		count--;
-    		fpga.sendIrDAdata(irdata.getData('m'));
-    		textView1.setText("éŸ³é‡-ãŒæŠ¼ã•ã‚Œã¾ã—ãŸ");
+    		fpga.sendIrDAdata(ch_min.get_data());
+    		textView1.setText(""+ch_min.get_data()+":"+count+"");
     		}
     		break;
 
-    	/*button9ã‚’æŠ¼ã—ãŸã¨ãã«ã¯é›»æº*/
+    	/*button9‚ğ‰Ÿ‚µ‚½‚Æ‚«‚É‚Í“dŒ¹*/
     	case R.id.button9:
     		if(learnf == true)
     			Learn(v,'P');
     		else{
-    			fpga.sendIrDAdata(irdata.getData('P'));
-    			textView1.setText("é›»æºãŒæŠ¼ã•ã‚Œã¾ã—ãŸ");
+    			fpga.sendIrDAdata(ch_pow.get_data());
+    			textView1.setText(""+ch_pow.get_data()+"");
     		}
     		break;
 
-    	/*button10ã‚’æŠ¼ã—ãŸã¨ãã«ã¯å­¦ç¿’ãƒ¢ãƒ¼ãƒ‰*/
+    	/*button10‚ğ‰Ÿ‚µ‚½‚Æ‚«‚É‚ÍŠwKƒ‚[ƒh*/
     	case R.id.button10:
     		if(learnf==false){
     		learnf = true;
     		textView1.setTextColor(Color.RED);
     	    textView1.setBackgroundColor(Color.BLACK);
-    	    textView1.setText("å­¦ç¿’ãƒ¢ãƒ¼ãƒ‰");
+    	    textView1.setText("ŠwKƒ‚[ƒh");
 
     		}
     		else{
@@ -364,7 +307,7 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
 
 
 
-/**************************é•·æŠ¼ã—å‡¦ç†**************************/
+/**************************’·‰Ÿ‚µˆ—**************************/
 
 
 
@@ -401,7 +344,7 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
 
 
 
-/**************************å­¦ç¿’ãƒ¢ãƒ¼ãƒ‰é–¢æ•°**************************/
+/**************************ŠwKƒ‚[ƒhŠÖ”**************************/
 
 
 
@@ -409,13 +352,47 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
 
 
     public void Learn(View v ,char ch){
-    	irdata.setData(ch,fpga.recieveIrDAdata());
-    	textView1.setText(""+ch+"ã®å­¦ç¿’");
+    	switch(ch){
+    	case '1':
+    		ch_1.set_data(fpga.recieveIrDAdata());
+    		textView1.setText(""+ch+"‚ÌŠwK");
+    		break;
+    	
+    	case '2':
+        	ch_2.set_data(fpga.recieveIrDAdata());
+        	textView1.setText(""+ch+"‚ÌŠwK");
+        	break;
+        	
+    	case '3':
+        	ch_3.set_data(fpga.recieveIrDAdata());
+        	textView1.setText(""+ch+"‚ÌŠwK");
+        	break;
+        	
+    	case '4':
+        	ch_4.set_data(fpga.recieveIrDAdata());
+        	textView1.setText(""+ch+"‚ÌŠwK");
+        	break;
+        	
+    	case 'p':
+        	ch_plu.set_data(fpga.recieveIrDAdata());
+        	textView1.setText(""+ch+"‚ÌŠwK");
+        	break;
+        	
+    	case 'm':
+        	ch_min.set_data(fpga.recieveIrDAdata());
+        	textView1.setText(""+ch+"‚ÌŠwK");
+        	break;
+        	
+    	case 'P':
+        	ch_pow.set_data(fpga.recieveIrDAdata());
+        	textView1.setText(""+ch+"‚ÌŠwK");
+        	break;
+    	}
     }
 
 
 
-/**************************ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãƒ¡ãƒ‹ãƒ¥ãƒ¼**************************/
+/**************************ƒIƒvƒVƒ‡ƒ“ƒƒjƒ…[**************************/
 
 
 
