@@ -1,0 +1,21 @@
+module jp{
+  module ac{
+    module utsunomiya{
+      module is{
+      interface SS2012FPGA {
+     	//typedef sequence<octet> ImageData;
+      
+  		void setMotorTorque(in long motorID, in long maxTorque, in long torque);
+
+  		void playAlarmSound();
+  		long getAlarmSwitchState();
+  		
+  		void sendIrDAdata(in long dataHigh, in short dataLow);
+  		void receiveIrDAdata(out long dataHigh, out short dataLow);
+  		
+  		//ImageData getCameraImage();
+		};
+	  };
+	};
+  };
+};
