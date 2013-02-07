@@ -1,18 +1,10 @@
 package jp.ac.utsunomiya.is.ss2012fpgatest;
 
 
-//import com.example.remort.MainActivity.Irdata;
-
-//import com.example.remort.R;
-
-//import com.example.remort.R;
-
 import jp.ac.utsunomiya.is.FPGAController;
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -21,23 +13,19 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.SeekBar;
 
 public class MainActivity extends Activity implements OnClickListener, OnLongClickListener,OnTouchListener {
 	private FPGAController fc;
 	private EditText editTextIPaddress;
 	private Activity thisActivity;
-	private CheckBox checkBoxAlarmSwitchState;
-	private EditText editTextIrDAdata;
-	private Irdata ch_1;				//赤外線リモコンコード
-	private Irdata ch_2;
-	private Irdata ch_3;
-	private Irdata ch_4;
-	private Irdata ch_plu;
-	private Irdata ch_min;
-	private Irdata ch_pow;
+	private IrData ch_1;				//赤外線リモコンコード
+	private IrData ch_2;
+	private IrData ch_3;
+	private IrData ch_4;
+	private IrData ch_plu;
+	private IrData ch_min;
+	private IrData ch_pow;
 	private Button button1; 	//1ch
 	private Button button2; 	//2ch
 	private Button button3; 	//3ch
@@ -47,15 +35,19 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
 	private Button button7; 	//Pow
 	private Button buttonExit; 	//exit
 	private boolean longclick = true;	//長押しフラグ
+
+
+
+
 	/**************************赤外線リモコンコードデータクラス**************************/
 
-	public class Irdata{
+	public class IrData{
 		private int ch_code1;
 		private short ch_code2;
-		
+
 
 		/*初期化*/
-		Irdata(){ ch_code1 = 0; ch_code2 = 0;}
+		IrData(){ ch_code1 = 0; ch_code2 = 0;}
 
 		/*リモコンコードのゲッタ*/
 		public int getData1(){ return ch_code1; }
@@ -64,23 +56,27 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
 		/*リモコンコードのセッタ*/
 		public void setData(int data1,short data2){ ch_code1 = data1; ch_code2 = data2; }
 	}
-	
+
+
+
+
+	/**************************起動直後処理**************************/
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         thisActivity = this;
         setContentView(R.layout.activity_main);
         this.init();
-		
+
 		//リモコンデータの初期化
-    	ch_1 = new Irdata();
-    	ch_2 = new Irdata();
-    	ch_3 = new Irdata();
-    	ch_4 = new Irdata();
-    	ch_plu = new Irdata();
-    	ch_min = new Irdata();
-    	ch_pow = new Irdata();
-    	
+    	ch_1 = new IrData();
+    	ch_2 = new IrData();
+    	ch_3 = new IrData();
+    	ch_4 = new IrData();
+    	ch_plu = new IrData();
+    	ch_min = new IrData();
+    	ch_pow = new IrData();
+
     	ch_1.setData((int)0x555AF148,(short)0x80C9);
     	ch_2.setData((int)0x555AF148,(short)0x40C5);
     	ch_3.setData((int)0x555AF148,(short)0xC0CD);
@@ -95,45 +91,36 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
-    
+
+
+
+
+
+    /**************************初期化処理**************************/
     private void init(){
     	setContentView(R.layout.activity_main);
-               
+
         fc = new FPGAController();
 		fc.initialize(new String[]{});
 
 		Button buttonConnect = (Button) findViewById(R.id.buttonConnect);
 		buttonConnect.setOnClickListener(connectButtonListener);
 		editTextIPaddress = (EditText)findViewById(R.id.editTextIPaddress);
-		
-		//setupTorqueBar(R.id.seekBarLeft, 1);
-		//setupTorqueBar(R.id.seekBarRight, 0);
-		
-		//Button buttonAlarmSound = (Button) findViewById(R.id.buttonAlarmSound);
-		//buttonAlarmSound.setOnClickListener(alarmButtonListener);
 
-		//Button buttonGetAlarmSwitchState = (Button) findViewById(R.id.buttonGetAlarmSwitchState);
-		//buttonGetAlarmSwitchState.setOnClickListener(getAlarmSwitchStateButtonListener);
-		
-		//checkBoxAlarmSwitchState = (CheckBox) findViewById(R.id.checkBoxAlarmSwitchState);
-/*
-		Button buttonSendIrDA =  (Button) findViewById(R.id.buttonSendIrDA);
-		buttonSendIrDA.setOnClickListener(sendIrDAButtonListener);
-		editTextIrDAdata = (EditText)findViewById(R.id.editTextIrDAdata);*/
-		
-		//1ch 
+
+		//1ch
         button1 = (Button)findViewById(R.id.button1);
         button1.setOnClickListener(this);
 
-        //2ch 
+        //2ch
         button2 = (Button)findViewById(R.id.button2);
         button2.setOnClickListener(this);
 
-        //3ch 
+        //3ch
         button3 = (Button)findViewById(R.id.button3);
         button3.setOnClickListener(this);
 
-        //4ch 
+        //4ch
         button4 = (Button)findViewById(R.id.button4);
         button4.setOnClickListener(this);
 
@@ -152,24 +139,31 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
         //電源
         button7 = (Button)findViewById(R.id.button7);
         button7.setOnClickListener(this);
-        
+
         //Exit
         buttonExit = (Button)findViewById(R.id.buttonExit);
         buttonExit.setOnClickListener(this);
 
     }
 
-	
+
 	private boolean connected = false;
+
+
+
+
+
+
+	/**************************クリック処理**************************/
     private View.OnClickListener connectButtonListener = new View.OnClickListener() {
 		public void onClick(View v) {
 			if(connected) return;
 			if(editTextIPaddress.getText().toString().equals("")) return;
 			connected=true;
-			
+
 			Button thisButton = (Button) v;
 			thisButton.setText("Connected");
-			
+
 			try {
 				fc.connect(editTextIPaddress.getText().toString());
 			} catch (Exception e) {
@@ -177,9 +171,11 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
 			}
 		}
     };
-    
-    /**************************タッチ処理**************************/
 
+
+
+
+    /**************************タッチ処理**************************/
 
     public boolean onTouch(View v,MotionEvent event) {
 
@@ -196,15 +192,13 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
 
         return false;
       }
-    
-/**************************クリック処理**************************/
-    
-    /*ボタンをクリックしたときの動作*/
+
+    /**************************クリック処理**************************/
+
     public void onClick(View v){
     	if(!connected) return;
 
     	switch(v.getId()){
-
 
     	/*button1を押したときには1ch*/
     	case R.id.button1:
@@ -213,9 +207,7 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
     		break;
-
 
     	/*button2を押したときには2ch*/
     	case R.id.button2:
@@ -224,7 +216,6 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
     		break;
 
     	/*button3を押したときには3ch*/
@@ -234,7 +225,6 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
     		break;
 
     	/*button4を押したときには4ch*/
@@ -244,7 +234,6 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
- 
     		break;
 
     	/*button5を押したときには+*/
@@ -254,7 +243,6 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
     		break;
 
     	/*button6を押したときには-*/
@@ -264,7 +252,6 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
     		break;
 
     	/*button7を押したときにはPow*/
@@ -274,28 +261,23 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
     		break;
 
     	/*button8を押したときにはExit*/
     	case R.id.buttonExit:
     		thisActivity.finish();
     		finish();
-   
     		break;
-
-
-    	}
-    }
+    	}//swich
+    }//onClick
 
 
 
 
 
 
-/**************************長押し処理**************************/
+    /**************************長押し処理**************************/
     public boolean onLongClick(final View v) {
-
 
     	new Thread (new Runnable() {
 
@@ -317,25 +299,6 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
 
 		return true;
 	}
-    
-    
-    //リモコンボタンリスナー
-     
-    /*private View.OnClickListener sendIrDAButtonListener = new View.OnClickListener() {
-  		public void onClick(View v) {
- 			if(!connected) return;
- 			try {
- 				String IrDAstring = editTextIrDAdata.getText().toString();
- 				String IrDAhigh = IrDAstring.substring(0, 8);
- 				String IrDAlow  = IrDAstring.substring(0, 4);
- 				int dataHigh  = Integer.parseInt(IrDAhigh, 16);
- 				short dataLow = Short.parseShort(IrDAlow, 16);
-			
-				fc.sendIrdaData(dataHigh, dataLow);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-  		}
-     };*/
-  
+
+
 }
